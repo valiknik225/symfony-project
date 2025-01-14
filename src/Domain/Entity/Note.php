@@ -12,7 +12,7 @@ use Symfony\Component\Uid\AbstractUid;
 #[ORM\Table(name: 'notes')]
 class Note
 {
-    #[ORM\Column(type: Types::DATE_IMMUTABLE,)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE,)]
     private DateTimeInterface $createdAt;
 
     public function __construct(

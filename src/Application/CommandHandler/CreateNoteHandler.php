@@ -5,7 +5,9 @@ namespace App\Application\CommandHandler;
 use App\Application\Command\CreateNoteCommand;
 use App\Domain\Entity\Note;
 use App\Domain\Storage\NoteRepositoryInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 class CreateNoteHandler
 {
     public function __construct(

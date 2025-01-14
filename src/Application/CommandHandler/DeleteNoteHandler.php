@@ -7,7 +7,9 @@ use App\Application\Command\DeleteNoteCommand;
 use App\Domain\Entity\Note;
 use App\Domain\Exception\NoteNotFoundException;
 use App\Domain\Storage\NoteRepositoryInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler]
 class DeleteNoteHandler
 {
     public function __construct(

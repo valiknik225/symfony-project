@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Messenger\Bridge\Amqp\Transport\AmqpStamp;
 use Symfony\Component\Messenger\Exception\ExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -34,7 +34,9 @@ class NoteController extends AbstractController
 
         if (isset($data['name']) && isset($data['content'])) {
             $command = new CreateNoteCommand($data['name'], $data['content']);
-            $this->bus->dispatch($command);
+            $this->bus->dispatch($command, [
+                new AmqpStamp('command', AMQP_NOPARAM),
+            ]);
             return new JsonResponse('Note creation message sent!');
         }
         return new JsonResponse('Invalid input data', Response::HTTP_BAD_REQUEST);

@@ -18,10 +18,21 @@ framework:
             # sync: 'sync://'
 
             command_transport:
-                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                dsn: '%env(RABBITMQ_URL)%'
+                options:
+                    exchange:
+                        name: 'note_transport'
+                        type: 'direct'  # Тип обменника
+#                        default_publish_routing_key: 'command'  # Устанавливаем routing key для отправки в очередь 'command'
+#                    queue_name: 'command'  # Название очереди
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
+
+            sync:
+                dsn: 'sync://'
+                options:
+                    #
 
             failed: 'doctrine://default?queue_name=failed'
 
