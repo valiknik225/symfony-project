@@ -7,13 +7,23 @@ framework:
             async:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
                 options:
-                    use_notify: true
-                    check_delayed_interval: 60000
+#                    use_notify: true
+#                    check_delayed_interval: 60000
+#                    exchange: 'my_exchange'  # Указываем конкретный обменник
+#                    queue_name: 'my_queue'  # Имя очереди
                 retry_strategy:
                     max_retries: 3
                     multiplier: 2
-            failed: 'doctrine://default?queue_name=failed'
+
             # sync: 'sync://'
+
+            command_transport:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                retry_strategy:
+                    max_retries: 3
+                    multiplier: 2
+
+            failed: 'doctrine://default?queue_name=failed'
 
         default_bus: messenger.bus.default
 
@@ -21,6 +31,9 @@ framework:
             messenger.bus.default: []
 
         routing:
+            App\Application\Command\CreateNoteCommand: command_transport
+            App\Application\Command\DeleteNoteCommand: command_transport
+
             Symfony\Component\Mailer\Messenger\SendEmailMessage: async
             Symfony\Component\Notifier\Message\ChatMessage: async
             Symfony\Component\Notifier\Message\SmsMessage: async
